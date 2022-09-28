@@ -27,7 +27,7 @@ let userSchema = mongoose.Schema({
     FavoriteMovies: [{type: mongoose.Schema.Types.ObjectId, ref: 'Movie'}]
 });
 let actorSchema = mongoose.Schema({
-    Actorname: {type:StaticRange, required: true},
+    Actorname: {type:String, required: true},
     Bio: {type: String, required: true}
 });
 let Movie = mongoose.model('Movie', movieSchema);

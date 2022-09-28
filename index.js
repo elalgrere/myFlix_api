@@ -5,9 +5,6 @@ const uuid = require("uuid");
 const morgan = require("morgan");
 const mongoose = require('mongoose');
 const Models = require('./models.js');
-//const Genres = Models.Genre;
-//const Directors = Models.Director;
-
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -16,13 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-//app.get "/", (req, res) => {
-  //res.send("Welcome to myFlix");
-//};
-
 //CREATE 
-//users
 
+//Create users
 app.post('/users', (req, res) => {
   Users.findOne({ Username: req.body.Username })
     .then((user) => {
@@ -49,18 +42,7 @@ app.post('/users', (req, res) => {
     });
 });
 
-app.get('/users', (req, res) => {
-	Users.find()
-		.then((users) => {
-			res.status(201).json(users);
-		})
-		.catch((err) => {
-			console.error(err);
-			res.status(500).send('Error: ' + err);
-		});
-});
-//users favorite movie
-
+//create users favorite movie
 app.post('/users/:id/:movieTitle', (req,res) =>{
   const {id, movieTitle} = req.params;
   const updatedUser = req.body;
@@ -72,25 +54,6 @@ if (user){
     res.status(400).send ('no such user')
 }
 })
-
-app.post('/users/:Username/movies/:MovieID', (req, res) => {
-	Users.findOneAndUpdate(
-		{ Username: req.params.Username },
-		{
-			$push: { FavoriteMovies: req.params.MovieID },
-		},
-		{ new: true },
-		(err, updatedUser) => {
-			if (err) {
-				console.error(err);
-				res.status(500).send('Error: ' + err);
-			} else {
-				res.json(updatedUser);
-			}
-		}
-	);
-});
-
 
 //READ
 // Get all users
@@ -165,15 +128,58 @@ app.get('/movies/directors/:directorName', (req, res) => {
 		});
 });
 
-
-
-
-
-
 //UPDATE
 
 //Update user information
 
+app.put('/users/:Username', (req, res) => {
+	Users.findOneAndUpdate(
+		{ Username: req.params.Username },
+		{
+			$set: {
+				Username: req.body.Username,
+				Password: req.body.Password,
+				Email: req.body.Email,
+				Birthday: req.body.Birthday,
+			},
+		},
+		{ new: true },
+		(err, updatedUser) => {
+			if (err) {
+				console.error(err);
+				res.status(500).send('Error: ' + err);
+			} else {
+				res.json(updatedUser);
+			}
+		}
+	);
+});
+
+//Update movie in user's list
+app.put('/users/:Username/movies/:MovieID', (req, res) => {
+	Users.findOneAndUpdate(
+		{ Username: req.params.Username },
+		{
+			$set: {
+				Username: req.body.Username,
+				Favoritemovie: req.body.MovieID
+			},
+		},
+		{ new: true },
+		(err, updatedMovie) => {
+			if (err) {
+				console.error(err);
+				res.status(500).send('Error: ' + err);
+			} else {
+				res.json(updatedUser);
+			}
+		}
+	);
+});
+
+//DELETE
+
+//Delete user
 app.delete('/users/:Username', (req, res) => {
 	Users.findOneAndRemove({ Username: req.params.Username })
 		.then((user) => {
@@ -188,22 +194,8 @@ app.delete('/users/:Username', (req, res) => {
 			res.status(500).send('Error: ' + err);
 		});
 });
-// Add a movie to a user's list of favorites
-app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, {
-    $push: { favoriteMovies: req.params.MovieID }
-  },
-    { new: true }, // This line makes sure that the updated document is returned
-    (err, updatedUser) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      } else {
-        res.json(updatedUser);
-      }
-    });
-});
 
+//
 app.delete('/users/:Username/movies/:MovieID', (req, res) => {
 	Users.findOneAndUpdate(
 		{ Username: req.params.Username },
@@ -222,23 +214,10 @@ app.delete('/users/:Username/movies/:MovieID', (req, res) => {
 	);
 });
 
-// Delete a user by username
-app.delete('/users/:Username/movies/:MovieID', (req, res) => {
-	Users.findOneAndUpdate(
-		{ Username: req.params.Username },
-		{
-			$pull: { FavoriteMovies: req.params.MovieID },
-		},
-		{ new: true },
-		(err, updatedUser) => {
-			if (err) {
-				console.error(err);
-				res.status(500).send('Error: ' + err);
-			} else {
-				res.json(updatedUser);
-			}
-		}
-	);
+// error handler
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.status(500).send('An error was encountered!');
 });
 
 

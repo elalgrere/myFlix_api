@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Movie API Documentation</title>
+    </head>
+    <body>
+        <header>
+            <h1>Movie API Documentation</h1>
+        </header>
+        <main>
+            <h2>Objective</h2>
+            <p>To build an api for a movies application which provides information about films, directors, and genres.
+                The users will be able to sing up, update their personal information, and create a list of favorite movies.<p>
+            <h2>Main features<h2>
+            <ul>
+              <li>Allow new users to register</li>
+              <li>Allow users to add a movie to their list of favorites</li>
+              <li>Return data about all users</li>
+              <li>Return data about users by name</li>
+              <li>Return data about all movies</li>
+              <li>Return data about movies by title</li> 
+              <li>Return data about a genre (description) by name/title</li>
+              <li>Return data about a director (bio, birth year, death year) by name</li>
+              <li>>Allow to remove a user by name</li>
+              <li>>Allow users to remove a movie from their list of favorites</li>
+              <li>Allow existing users to deregister</li>
+              <li>Allow to delete users Favorite movie</li>
+             
+        </ul>
+        <h2>API Endpoints</h2>
+        <table>
+            <tr>
+                <th>Endpoint URL</th>
+                <th>HTTP Method</th>
+                <th>Query Parameters</th>
+                <th>Request body data format</th>
+                <th>Response body data format</th>
+            </tr>
+            <tr>
+                <td>Get Movies</td>
+                <td>/movies</td>
+                <td>GET</td>
+                <td>-</td>
+                <td>-</td>
+                <td>
+                    [             
+                        { 
+                         _id: ObjectId("6332d8e20de54b7446564be2"),    
+                         "Title": "Schindlers list",
+                         "Description": "American historical drama film based on the novel Schindler Ark by Australian writer Thomas Keneally . Directed and co - produced by Steven Spielberg , with a screenplay by Steven Zaillian , the film recounts a period in the life of Oskar Schindler , an ethnic German businessman who saved more than a thousandPolish Jews from dying in the Holocaust during World War II . employing them as workers in their factories.",
+                            "Genre": {
+                                "Name": "Drama",
+                                "Description": "'In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone. Drama of this kind is usually qualified with additional terms that specify its particular super-genre, macro-genre, or micro-genre.  To these ends, a primary element in a drama is the occurrence of conflict—emotional, social, or otherwise—and its resolution in the course of the storyline."
+                            },
+                            "Director": {
+                                "Name": "Steven Spielberg",
+                                "Bio": "Steven Allan Spielberg is an American film director, screenwriter and producer. He is considered one of the pioneers of the New Hollywood era and is also one of the most recognized directors and popular in the world film industry.",
+                                "Birth": "18/12/1946",
+                                "Death": ""
+                            },
+                        {    
+                           "Actors": ["Liam Nesson", "Ben Kingsley", "Caroline Goodall"],
+                            "ImagePath": "https://upload.wikimedia.org/wikipedia/en/3/38/Schindler%27s_List_movie.jpg",
+                            "Featured": true
+                        },
+                    ]
+                </td>
+            </tr>
+            <tr>
+                <td>Get Genre by Name</td>
+                <td>/movies/genre/:genreName</td>
+                <td>GET</td>
+                <td>:genreName as Name of the Genre</td>
+                <td>-</td>
+                <td>
+                    {
+                        "Name": "Drama",
+                        "Description": "Drama is a category or genre of narrative fiction intended to be more serious than humorous in tone. Drama of this kind is usually qualified with additional terms that specify its particular super-genre, macro-genre, or micro-genre, such as soap opera, police crime drama, political drama, legal drama, historical drama, domestic drama, teen drama, and comedy-drama (dramedy)."
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Get Director by Name</td>
+                <td>/movies/directors/:directorName</td>
+                <td>GET</td>
+                <td>:directorName as Name of the Director</td>
+                <td>-</td>
+                <td>
+                    {
+                        "Name": "Peter Jackson",
+                        "Bio": "Peter Jackson made history with The Lord of the Rings trilogy, becoming the first person to direct three major feature films simultaneously.",
+                        "Birth": "1961",
+                        "Death": ""
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Create User</td>
+                <td>/users</td>
+                <td>POST</td>
+                <td>-</td>
+                <td>
+                    {
+                        "Username": "Testuser1",
+                        "Password": "Testpassword1",
+                        "Email": "testuser1@gmail.com",
+                        "Birthday": "09/02/55"
+                    }
+                </td>
+                <td>
+                    {
+                        "Username": "Testuser1",
+                        "Password": "Testpassword1",
+                        "Email": "testuser1@gmail.com",
+                        "Birthday": "1955-09-01T23:00:00.000Z",
+                        "FavoriteMovies": [],
+                        "_id": "6331b33ab9721858f9eec1ee",
+                        "__v": 0
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Update User</td>
+                <td>/users/:Username</td>
+                <td>PUT</td>
+                <td>:Username as the name of the user</td>
+                <td>
+                    {
+                        "Username": "Testuser1",
+                        "Password": "Testpassword2",
+                        "Email": "testuser1@gmail.com",
+                        "Birthday": "09/02/55"
+                    }
+                </td>
+                <td>
+                    {
+                        "_id": "6331b33ab9721858f9eec1ee",
+                        "Username": "Testuser1",
+                        "Password": "Testpassword2",
+                        "Email": "testuser1@gmail.com",
+                        "Birthday": "1955-09-01T23:00:00.000Z",
+                        "FavoriteMovies": [],
+                        "__v": 0
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Add Movie to Favorites</td>
+                <td>/users/:Username/movies/:MovieID</td>
+                <td>POST</td>
+                <td>:MovieID as the ID of the movie to be added, :Username as the name of the user</td>
+                <td>-</td>
+                <td>
+                    {
+                        "_id": "63317ede42ebead16370ad78",
+                        "Username": "Testuser1",
+                        "Password": "Testpassword1",
+                        "Email": "testuser1@gmail.com",
+                        "Birthday": "1955-09-01T23:00:00.000Z",
+                        "FavoriteMovies": [
+                            "632d88ace53641d825b56c06"
+                        ],
+                        "__v": 0
+                    }
+                </td>
+            </tr>
+            tr>
+            <td>Remove Movie from Favorites</td>
+            <td>/users/:Username/movies/:MovieID</td>
+            <td>DELETE</td>
+            <td>:MovieID as the ID of the movie to be added, :Username as the name of the user</td>
+            <td>-</td>
+            <td>
+                {
+                    "_id": "6331b33ab9721858f9eec1ee",
+                    "Username": "Testuser1",
+                    "Password": "Testpassword2",
+                    "Email": "testuser1@gmail.com",
+                    "Birthday": "1955-09-01T23:00:00.000Z",
+                    "FavoriteMovies": [],
+                    "__v": 0
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>Delete User</td>
+            <td>/users/:Username</td>
+            <td>DELETE</td>
+            <td>:Username as name of the user</td>
+            <td>-</td>
+            <td>Message that removal from database has been successful or user couldn't be found</td>
+        </tr>
+    </table>
+</main>
+</body>
+</html>        
