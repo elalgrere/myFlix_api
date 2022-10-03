@@ -6,9 +6,11 @@ const morgan = require("morgan");
 const mongoose = require('mongoose');
 const passport = require('passport');
 const Models = require('./models.js');
+const { check, validationResult } = require('express-validator');
 const Movies = Models.Movie;
 const Users = Models.User;
 const bodyParser = require("body-parser");
+const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,8 +26,26 @@ mongoose.connect('mongodb://localhost:27017/myFLixDB', { useNewUrlParser: true, 
 //CREATE 
 
 //Create users
-app.post('/users', (req, res) => {
-	let hashedPassword = Users.hashPassword(req.body.Password);
+app.post('/users',
+  // Validation logic here for request
+  //you can either use a chain of methods like .not().isEmpty()
+  //which means "opposite of isEmpty" in plain english "is not empty"
+  //or use .isLength({min: 5}) which means
+  //minimum value of 5 characters are only allowed
+  [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ], (req, res) => {
+
+  // check the validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    let hashedPassword = Users.hashPassword(req.body.Password);
 	Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
 	  .then((user) => {
 		if (user) {
@@ -285,6 +305,8 @@ app.use((err, req, res, next) => {
 	res.status(500).send('An error was encountered!');
 });
 
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
+});
 
-  app.listen(8080,() => console.log('listen on 8080'))
 
