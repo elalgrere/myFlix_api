@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const uuid = require("uuid");
 const morgan = require("morgan");
 const mongoose = require('mongoose');
+const passport = require('passport');
 const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -196,15 +197,6 @@ app.get(
 app.put(
 	"/users/:Username",
 	passport.authenticate("jwt", { session: false }),
-	[
-	  check("Username", "Username is required").isLength({ min: 5 }),
-	  check(
-		"Username",
-		"Username contains non alphanumeric characters - not allowed."
-	  ).isAlphanumeric(),
-	  check("Password", "Password is required").not().isEmpty(),
-	  check("Email", "Email does not appear to be valid").isEmail(),
-	],
 	(req, res) => {
 	  let errors = validationResult(req);
   
