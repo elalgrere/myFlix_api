@@ -95,7 +95,7 @@ app.get('/movies', (req, res) => {
   });
 
 
-//Get genre information
+//Get genre by name
 
 
 app.get(
@@ -167,7 +167,6 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
 
 //DELETE
 
-//Delete user
 // Delete a user by username
 app.delete('/users/:Username', (req, res) => {
 	Users.findOneAndRemove({ Username: req.params.Username })
@@ -184,7 +183,7 @@ app.delete('/users/:Username', (req, res) => {
 	  });
   });
 
-//
+//Delete favorite movie
 app.delete(
 	"/users/:Username/movies/:MovieID", (req, res) => {
 	  Movies.findOneAndRemove({ FavoriteMovies: req.params.MovieID })
@@ -209,6 +208,10 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(8080,() => console.log('listen on 8080'));
+
+
+
+
 
 
 
