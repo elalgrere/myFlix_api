@@ -14,9 +14,6 @@ const Users = Models.User;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
-
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
@@ -208,8 +205,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(8080,() => console.log('listen on 8080'));
-
-
 
 
 
