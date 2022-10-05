@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-mongoose.connect('mongodb://localhost:27017/myFLixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 //CREATE 
@@ -72,43 +72,35 @@ app.get('/users/:Username', (req, res) => {
 	  });
   });
 //Get all movies
-app.get(
-	"/movies", passport.authenticate("jwt", { session: false }), (req, res) => {
-	Movies.find()
+app.get('/movies', (req, res) => {
+	Users.find()
 	  .then((movies) => {
 		res.status(201).json(movies);
 	  })
-	  .catch((error) => {
-		console.error(error);
-		res.status(500).send("Error: " + error);
+	  .catch((err) => {
+		console.error(err);
+		res.status(500).send('Error: ' + err);
+	  });
+  });
+  //Get movies by title
+  app.get('/movies/:Moviename', (req, res) => {
+	Users.findOne({ Moviename: req.params.Moviename })
+	  .then((movie) => {
+		res.json(movie);
+	  })
+	  .catch((err) => {
+		console.error(err);
+		res.status(500).send('Error: ' + err);
 	  });
   });
 
 
-// Get movies by title
-
-app.get(
-	"/movies/:Title",
-	passport.authenticate("jwt", { session: false }),
-	(req, res) => {
-	  Movies.findOne({ Title: req.params.Title })
-		.then((movie) => {
-		  res.json(movie);
-		})
-		.catch((error) => {
-		  console.error(error);
-		  res.status(400).send("Error: " + "No such movie!");
-		});
-	}
-  );
-//Get genre information
+//Get genre by name
 
 
 app.get(
-	"/movies/genre/:Name",
-	passport.authenticate("jwt", { session: false }),
-	(req, res) => {
-	  Movies.find({ "Genre.Name": req.params.Name })
+	"/movies/genre/:Name", (req, res) => {
+	  Movies.find({ "Genre.Name": req.params.Genrename })
 		.then((movie) => {
 		  res.json(movie);
 		})
@@ -121,16 +113,14 @@ app.get(
 
 //Get director information
 app.get(
-	"/movies/director/:Name",
-	passport.authenticate("jwt", { session: false }),
-	(req, res) => {
-	  Movies.findOne({ "Director.Name": req.params.Name })
+	"/movies/director/:Name", (req, res) => {
+	  Movies.find({ "Director.Name": req.params.Directorname })
 		.then((movie) => {
 		  res.json(movie);
 		})
 		.catch((error) => {
 		  console.error(error);
-		  res.status(400).send("Error: " + "No such director!");
+		  res.status(400).send("Error: " + "No such genre!");
 		});
 	}
   );
@@ -177,7 +167,6 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
 
 //DELETE
 
-//Delete user
 // Delete a user by username
 app.delete('/users/:Username', (req, res) => {
 	Users.findOneAndRemove({ Username: req.params.Username })
@@ -194,11 +183,9 @@ app.delete('/users/:Username', (req, res) => {
 	  });
   });
 
-//
+//Delete favorite movie
 app.delete(
-	"/users/:Username/movies/:MovieID",
-	passport.authenticate("jwt", { session: false }),
-	(req, res) => {
+	"/users/:Username/movies/:MovieID", (req, res) => {
 	  Movies.findOneAndRemove({ FavoriteMovies: req.params.MovieID })
 		.then((movie) => {
 		  if (!movie) {
@@ -221,6 +208,10 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(8080,() => console.log('listen on 8080'));
+
+
+
+
 
 
 
