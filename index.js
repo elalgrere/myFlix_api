@@ -90,11 +90,7 @@ app.get('/movies', (req, res) => {
 		res.status(500).send('Error: ' + err);
 	  });
   });
-
-
 //Get genre by name
-
-
 app.get(
 	"/movies/genre/:Name", (req, res) => {
 	  Movies.find({ "Genre.Name": req.params.Genrename })
@@ -204,7 +200,9 @@ app.use((err, req, res, next) => {
 	res.status(500).send('An error was encountered!');
 });
 
-app.listen(8080,() => console.log('listen on 8080'));
+app.listen(8080,() => {
+	console.log('listen on 8080'),
+});
 
 
 

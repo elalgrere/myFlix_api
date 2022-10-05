@@ -1,22 +1,20 @@
 {
-  "name":"myflix-api",
-  "version":"1.0.0",
-  "main":"index.js",
-  "scripts":{"test":"echo \"Error: no test specified\" && exit 1",
-             "start":"node index.js","dev":"nodemon index.js"},
-  "keywords":[],
-  "author":"",
-  "license":"ISC",
-  "dependencies":{"bcrypt":"^5.0.1","body-parser":"^1.20.0",
-                  "eslint":"^8.23.0","express":"^4.18.1",
-                  "jsonwebtoken":"^8.5.1","mongoose":"^6.6.1",
-                  "morgan":"^1.10.0",
-                  "passport":"^0.6.0",
-                  "passport-jwt":"^4.0.0",
-                  "passport-local":"^1.0.0",
-                  "uuid":"^8.3.2"},
-  "devDependencies":{"nodemon":"^2.0.19"},
-  "repository":{"type":"git","url":"git+https://github.com/elalgrere/myFlix-app.git"},
-  "bugs":{"url":"https://github.com/elalgrere/myFlix-app/issues"},
-  "homepage":"https://github.com/elalgrere/myFlix-app#readme",
-  "description":""}
+  "name": "myflix_api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elalgrere/myFlixx_api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elalgrere/myFlixx_api/issues"
+  },
+  "homepage": "https://github.com/elalgrere/myFlixx_api#readme",
+  "description": ""
+}
