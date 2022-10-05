@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-mongoose.connect('mongodb://localhost:27017/myFLixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 //CREATE 
