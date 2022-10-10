@@ -7,9 +7,13 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+const { check, validationResult } = require('express-validator');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors()); 
 
 let auth = require('./auth')(app);
 
@@ -23,58 +27,52 @@ app.get('/',(req, res) => {
 	res.send('Welcome to myFlix app!');
 });
 app.post('/users',
-[
-  check('Name', 'Nname is requiered.').isLength({ min: 5 }),
-  check('Name', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-  check('Password', 'Password is required.').not().isEmpty(),
-  check('Email', 'Email does not appear to be valid').isEmail()
-], (req, res) => {
+  // Validation logic here for request
+  //you can either use a chain of methods like .not().isEmpty()
+  //which means "opposite of isEmpty" in plain english "is not empty"
+  //or use .isLength({min: 5}) which means
+  //minimum value of 5 characters are only allowed
+  [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ], (req, res) => {
 
-  // evaluate validations
-  let errors = validationResult(req);
-  if(!errors.isEmpty()) {
-	return res.status(422).json({ errors: errors.array() });
-  }
+  // check the validation object for errors
+    let errors = validationResult(req);
 
-  let hashedPassword = Users.hashPassword(req.body.Password);
-  Users.findOne({ Username: req.body.Username })
-	.then((user) => {
-	  if(user) {
-		return res.status(400).send(req.body.Username + ' already exists');
-	  } else {
-		Users.create({
-		  Username: req.body.Username,
-		  Password: hashedPassword,
-		  Email: req.body.Email,
-		  Birthday: req.body.Birthday
-		})
-		.then((user) => { res.status(201).json(user) })
-		.catch((err) => {
-		  console.error(err);
-		  res.status(500).send('Error: ' + err);
-		})
-	  }
-	})
-	.catch((err) => {
-	  console.error(err);
-	  res.status(500).send('Error: ' + err);
-	});
-});
-//READ
-// Get all users
-app.get('/users',
-	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
-	  Users.find()
-		.then((users) => {
-		  res.status(201).json(users);
-		})
-		.catch((error) => {
-		  console.error(error);
-		  res.status(500).send("Error: " + error);
-		});
-	}
-  );
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
+      .then((user) => {
+        if (user) {
+          //If the user is found, send a response that it already exists
+          return res.status(400).send(req.body.Username + ' already exists');
+        } else {
+          Users
+            .create({
+              Username: req.body.Username,
+              Password: hashedPassword,
+              Email: req.body.Email,
+              Birthday: req.body.Birthday
+            })
+            .then((user) => { res.status(201).json(user) })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).send('Error: ' + error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      });
+  });
+
 // Get a user by username
 app.get('/users/:Name', passport.authenticate('jwt', { session: false }),
 	(req, res) => {
