@@ -55,24 +55,36 @@ app.post('/users',
         } else {
           Users
             .create({
-              Username: req.body.Username,
+              Name: req.body.Username,
               Password: hashedPassword,
               Email: req.body.Email,
-              Birthday: req.body.Birthday
+              Birth: req.body.Birth
             })
             .then((user) => { res.status(201).json(user) })
             .catch((error) => {
               console.error(error);
-              res.status(500).send('Error: ' + error);
+              res.status(500).send('Error1: ' + error);
             });
         }
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).send('Error: ' + error);
+        res.status(500).send('Error2: ' + error);
       });
   });
 
+  app.get('/users', passport.authenticate('jwt', { session: false }),
+	(req, res) => {
+	  Users.findOne({ Name: req.body.Username })
+		.then((user) => {
+		  res.json(user);
+		})
+		.catch((err) => {
+		  console.error(err);
+		  res.status(500).send('Error: ' + err);
+		});
+	}
+  );
 // Get a user by username
 app.get('/users/:Name', passport.authenticate('jwt', { session: false }),
 	(req, res) => {

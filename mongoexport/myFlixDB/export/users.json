@@ -1,0 +1,9 @@
+{"_id":{"$oid":"633c3084057f6dd6c5641cea"},"Name":"Miguel A. Alegre","Password":"elalgrere","Email":"elalgrere@gmail.com","Birth":"01/06/1973","Favoritemovie":"Babel"}
+{"_id":{"$oid":"633c30a7e857a752bc4e818f"},"Name":"Miguel A. Alegre","Password":"elalgrere","Email":"elalgrere@gmail.com","Birth":"01/06/1973","Favoritemovie":"Babel"}
+{"_id":{"$oid":"633c3119e857a752bc4e8190"},"Name":"Hanna Vrbana","Password":"Hanni","Email":"hannvrb@yahoo.com","Birth":"14/12/1997","Favmovie":"Indiana Jones"}
+{"_id":{"$oid":"633c312fe857a752bc4e8191"},"Name":"Paul Jhones","Password":"Stacato","Email":"pauljh@hotmail.com","Birth":"15/05/1983","Favmovie":"Star Wars"}
+{"_id":{"$oid":"633c3143e857a752bc4e8192"},"Name":"Olivia Soto","Password":"Cantautoa","Email":"olivs@gmail.com","Birth":"02/09/1976","Favmovie":"Kill Bill"}
+{"_id":{"$oid":"633c3154e857a752bc4e8193"},"Name":"Kjersti Brander","Password":"Kjerstisita","Email":"kjbrander@gmail.com","Birth":"18/01/1975","Favmovie":"E.T"}
+{"_id":{"$oid":"633c3181e857a752bc4e8194"},"Name":"Felipe Aguilera","Password":"felefelon","Email":"felipagu@gmail.com","Birth":"20/05/1975","Favmovie":"Pulp fiction"}
+{"_id":{"$oid":"633f14d5f6a8e79e795be5bd"},"Username":"Isabela Branco","Password":"Fedrmus","Email":"federn@gmail.com","Birthday":{"$date":"1987-12-03T23:00:00Z"},"FavoriteMovies":[],"__v":0}
+{"_id":{"$oid":"633f1548f6a8e79e795be5c0"},"Username":"Federico","Password":"Fedrmus","Email":"federn@gmail.com","Birthday":{"$date":"1987-12-03T23:00:00Z"},"FavoriteMovies":[],"__v":0}
