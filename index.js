@@ -14,6 +14,7 @@ const { check, validationResult } = require('express-validator');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors()); 
+require('dotenv').config()
 
 let auth = require('./auth')(app);
 
@@ -34,7 +35,7 @@ app.post('/users',
   //or use .isLength({min: 5}) which means
   //minimum value of 5 characters are only allowed
   [
-    check('Username', 'Username is required').isLength({min: 5}),
+    //check('Username', 'Username is required').isLength({min: 5}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
@@ -56,10 +57,10 @@ app.post('/users',
         } else {
           Users
             .create({
-              Name: req.body.Username,
+              Username: req.body.Username,
               Password: hashedPassword,
               Email: req.body.Email,
-              Birth: req.body.Birth
+              Birthday: req.body.Birthday
             })
             .then((user) => { res.status(201).json(user) })
             .catch((error) => {
