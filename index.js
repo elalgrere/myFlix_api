@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors()); 
 require('dotenv').config()
 
+let allowedOrigins = ['http://localhost:1234', 'http://testsite.com'];
 let auth = require('./auth')(app);
 
 const passport = require('passport');
