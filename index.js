@@ -103,16 +103,26 @@ app.get('/users/:Name', passport.authenticate('jwt', { session: false }),
   );
 
 //Get all movies
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
-	Movies.find()
-	  .then((movies) => {
-		res.status(201).json(movies);
-	  })
-	  .catch((error) => {
-		console.error(error);
-		res.status(500).send('Error: ' + error);
-	  });
-  });
+app.get("/movies", function (req, res) {
+  Movies.find()
+    .then(function (movies) {
+      res.status(201).json(movies);
+    })
+    .catch(function (error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
+    });
+});
+//app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+//	Movies.find()
+//	  .then((movies) => {
+//		res.status(201).json(movies);
+//	  })
+//	  .catch((error) => {
+//		console.error(error);
+//		res.status(500).send('Error: ' + error);
+//	  });
+  //});
 
 
 // Get movies by title
