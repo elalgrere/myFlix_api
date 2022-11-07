@@ -68,10 +68,10 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-const accesLogstream = fs.createWriteStream(path.join(__firname, 'log.txt'), {flags: 'a'})
+//const accesLogstream = fs.createWriteStream(path.join(__firname, 'log.txt'), {flags: 'a'})
 
 
-app.use(morgan('combined', {stream: accesLogStream}));
+//app.use(morgan('combined', {stream: accesLogStream}));
 
 mongoose.connect('mongodb://localhost:27017/myFLixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
