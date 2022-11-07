@@ -69,13 +69,14 @@ let auth = require('./auth')(app);
 
 const passport = require('passport');
 require('./passport');
+//const accesLogstream = fs.createWriteStream(path.join(__firname, 'log.txt'), {flags: 'a'})
 
-app.use(morgan('combined', {stream: accesLogStream}));
+//app.use(morgan('combined', {stream: accesLogStream}));
 
 
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const accesLogstream = fs.createWriteStream(path.join(__firname, 'log.txt'), {flags: 'a'})
+
 
 
 
