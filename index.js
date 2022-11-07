@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const fs = require('fs');
+const path = require('path');
 const uuid = require("uuid");
 const morgan = require("morgan");
 const mongoose = require('mongoose');
@@ -11,38 +13,24 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors()); 
 require('dotenv').config()
 
-let allowedOrigins = ['http://localhost:1234', 'http://testsite.com'];
-let auth = require('./auth')(app);
+let allowedOrigins = ['http://localhost:1234', 'https://myflixmoviesapp.herokuapp.com/'];
 
-const passport = require('passport');
-require('./passport');
-
-//mongoose.connect('mongodb://localhost:27017/myFLixDB', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-//CREATE
-app.get('/',(req, res) => {
-	res.send('Welcome to myFlixx app!');
-});
 app.post('/users',
-  // Validation logic here for request
-  //you can either use a chain of methods like .not().isEmpty()
-  //which means "opposite of isEmpty" in plain english "is not empty"
-  //or use .isLength({min: 5}) which means
-  //minimum value of 5 characters are only allowed
   [
-    //check('Username', 'Username is required').isLength({min: 5}),
+	check('Username is require').isLength({min: 4 }),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
+	check('Email', 'Email needs an "@" character').isEmail(),
     check('Email', 'Email does not appear to be valid').isEmail()
   ], (req, res) => {
 
-  // check the validation object for errors
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -50,10 +38,9 @@ app.post('/users',
     }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
-    Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
+    Users.findOne({ Username: req.body.Username }) 
       .then((user) => {
         if (user) {
-          //If the user is found, send a response that it already exists
           return res.status(400).send(req.body.Username + ' already exists');
         } else {
           Users
@@ -76,6 +63,28 @@ app.post('/users',
       });
   });
 
+
+
+let auth = require('./auth')(app);
+
+const passport = require('passport');
+require('./passport');
+
+app.use(morgan('combined', {stream: accesLogStream}));
+
+
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const accesLogstream = fs.createWriteStream(path.join(__firname, 'log.txt'), {flags: 'a'})
+
+
+
+
+//CREATE
+app.get('/',(req, res) => {
+	res.send('Welcome to myFlixx app!');
+});
+
   app.get('/users', passport.authenticate('jwt', { session: false }),
 	(req, res) => {
 	  Users.findOne({ Name: req.body.Username })
@@ -91,7 +100,7 @@ app.post('/users',
 // Get a user by username
 app.get('/users/:Name', passport.authenticate('jwt', { session: false }),
 	(req, res) => {
-	  Users.findOne({ Name: req.params.Username })
+	  Users.findOne({ Name: req.params.Username, Password: req.params.Password })
 		.then((user) => {
 		  res.json(user);
 		})
@@ -102,17 +111,6 @@ app.get('/users/:Name', passport.authenticate('jwt', { session: false }),
 	}
   );
 
-//Get all movies
-app.get("/movies", function (req, res) {
-  Movies.find()
-    .then(function (movies) {
-      res.status(201).json(movies);
-    })
-    .catch(function (error) {
-      console.error(error);
-      res.status(500).send("Error: " + error);
-    });
-});
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Movies.find()
 	  .then((movies) => {
