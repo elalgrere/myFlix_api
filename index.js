@@ -5,7 +5,7 @@ const uuid = require("uuid");
 const morgan = require("morgan");
 const mongoose = require('mongoose');
 const Models = require('./models.js');
-
+const cors = require('cors');
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -15,7 +15,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 require('dotenv').config()
 
-let allowedOrigins = ['http://localhost:1234', 'https://testsite.com'];
+let allowedOrigins = ['http://localhost:1234', 'https://myflixmoviesapp.herokuapp.com/'];
+
+
+app.use(cors({
+	origin: (origin, callback) => {
+	  if(!origin) return callback(null, true);
+	  if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+		let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+		return callback(new Error(message ), false);
+	  }
+	  return callback(null, true);
+	}
+  }));
 
 app.post(
 	"/users",
@@ -68,10 +80,10 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-const accesLogstream = fs.createWriteStream(path.join(__firname, 'log.txt'), {flags: 'a'})
+//const accesLogstream = fs.createWriteStream(path.join(__firname, 'log.txt'), {flags: 'a'})
 
 
-app.use(morgan('combined', {stream: accesLogStream}));
+//app.use(morgan('combined', {stream: accesLogStream}));
 
 mongoose.connect('mongodb://localhost:27017/myFLixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
