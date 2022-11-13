@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 require('dotenv').config()
 
-let allowedOrigins = ['http://localhost:1234', 'https:/testsite.com/'];
+let allowedOrigins = ['http://localhost:1234', 'https://myflixmoviesapp.herokuapp.com/movies'];
 
 let auth = require('./auth')(app);
 
