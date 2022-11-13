@@ -15,8 +15,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 require('dotenv').config()
 
-let allowedOrigins = ['http://localhost:1234', 'https://myflixmoviesapp.herokuapp.com/'];
+let allowedOrigins = ['http://localhost:1234', 'https:/testsite.com/'];
 
+let auth = require('./auth')(app);
 
 app.use(cors({
 	origin: (origin, callback) => {
@@ -75,7 +76,6 @@ app.post(
 	}
   );
 
-let auth = require('./auth')(app);
 
 const passport = require('passport');
 require('./passport');
